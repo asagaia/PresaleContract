@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts\presalecontract.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> presalecontract.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/42</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/64</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/13</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/64</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity &gt;= 0.8.20;
+&nbsp;
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { IErrors } from "./errors.sol";
+import { PaymentManager } from "./paymentmanager.sol";
+import { TONTokenType } from "./enums.sol";
+&nbsp;
+contract PresaleContract is PaymentManager {
+    /*************
+     * Modifiers *
+     *************/
+<span class="fstat-no" title="function not covered" >    modifier presaleActive() {</span>
+<span class="cstat-no" title="statement not covered" >        require(block.timestamp &gt; presaleStartTime &amp;&amp; block.timestamp &lt; presaleEndTime, "E100")</span>;
+        _;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    modifier onlyReceivingAccount() {</span>
+<span class="cstat-no" title="statement not covered" >        require(msg.sender == receivingAccount, "E5")</span>;
+        _;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    modifier onlyReceivingAccountOrOwner() {</span>
+<span class="cstat-no" title="statement not covered" >        require(msg.sender == receivingAccount || msg.sender == owner, "E6")</span>;
+        _;
+    }
+&nbsp;
+    /**************
+     * Properties *
+     **************/
+    address immutable public receivingAccount;
+    uint256 immutable public presaleStartTime;
+    uint256 public presaleEndTime;
+&nbsp;
+    /******************
+     * Private Fields *
+     ******************/
+    mapping(address user =&gt; uint256 amount) private _lockedAmounts;
+    uint256 private _totalLockedAmount;
+&nbsp;
+    /// @param _receiving_account The address of the wallet which will receive the funds from the presale.
+<span class="fstat-no" title="function not covered" >    constructor(address _receiving_account, address _1xmmAddress, uint256 _presaleStartTime, uint256 _presaleEndTime, uint32 _initial1XMMPrice_USD) PaymentManager(_1xmmAddress, _initial1XMMPrice_USD) {</span>
+        receivingAccount = _receiving_account;
+<span class="cstat-no" title="statement not covered" >        require(_presaleStartTime &lt; _presaleEndTime, "Invalid presale times")</span>;
+        presaleStartTime = _presaleStartTime;
+        presaleEndTime = _presaleEndTime;
+    }
+&nbsp;
+    /// @notice Returns the amount of 1XMM tokens available for sale.
+<span class="fstat-no" title="function not covered" >    function availableForSale() public view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        return _availableForSale() - _totalLockedAmount;</span>
+    }
+&nbsp;
+    /// @notice Gets whether the presale is active.
+    /// @return True if the presale is active, false otherwise.
+<span class="fstat-no" title="function not covered" >    function isActive() external view returns (bool) {</span>
+<span class="cstat-no" title="statement not covered" >        return block.timestamp &gt;= presaleStartTime &amp;&amp; block.timestamp &lt; presaleEndTime;</span>
+    }
+&nbsp;
+    /// @notice Allows user to pay with ETH to receive 1XMM tokens.
+<span class="fstat-no" title="function not covered" >    function exchangeETH() external payable presaleActive onlyAuthorizedUser {</span>
+<span class="cstat-no" title="statement not covered" >        uint256 amount = msg.value;</span>
+<span class="cstat-no" title="statement not covered" >        uint256 available1XMM = availableForSale();</span>
+<span class="cstat-no" title="statement not covered" >        require(amount &gt; 0 &amp;&amp; available1XMM &gt; 0, "No quantity")</span>;
+        
+<span class="cstat-no" title="statement not covered" >        uint256 amount1XMM = _getAmountOf1XMMForToken(address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2), amount);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (available1XMM &lt; amount1XMM) {</span>
+            amount = _getAmountOfTokenFor1XMM(address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2), available1XMM);
+            amount1XMM = available1XMM;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            payable(msg.sender).transfer(msg.value - amount)</span>;
+        }
+&nbsp;
+        // If transfer fails, we refund the Ether
+<span class="cstat-no" title="statement not covered" >        if (_transfer(msg.sender, amount1XMM)) {</span>
+<span class="cstat-no" title="statement not covered" >            emit TradeExecuted(msg.sender, address(0), amount, amount1XMM);</span>
+        } else {
+            // We keep track record of failed trades
+            // and revert the transaction to refund the Ether
+<span class="cstat-no" title="statement not covered" >            emit TradeFailed(msg.sender, address(0), amount, amount1XMM);</span>
+<span class="cstat-no" title="statement not covered" >            payable(msg.sender).transfer(amount)</span>;
+            revert IErrors.TransferFailed(msg.sender, address(0), amount, amount1XMM);
+        }
+    }
+&nbsp;
+    /// @notice Enables the owner to transfer a specified amount of Ether to the owner's address.
+<span class="fstat-no" title="function not covered" >    function transferETHToReceivingAccount(uint256 value) external onlyReceivingAccountOrOwner payable {</span>
+<span class="cstat-no" title="statement not covered" >        uint256 balance = address(this).balance;</span>
+<span class="cstat-no" title="statement not covered" >        if (balance &lt;= 0 &amp;&amp; value &gt; balance) revert IErrors.ETHBalanceError(balance, value);</span>
+<span class="cstat-no" title="statement not covered" >        payable(receivingAccount).transfer(value)</span>;
+    }
+&nbsp;
+    /// @notice Allows users to pay with a specific token to receive 1XMM tokens.
+    /// @param token The address of the token to pay with.
+    /// @param amount The amount of the token to pay with.
+<span class="fstat-no" title="function not covered" >    function exchangeToken(address token, uint256 amount) external presaleActive onlyAuthorizedToken(token) onlyAuthorizedUser {</span>
+<span class="cstat-no" title="statement not covered" >        uint256 available1XMM = availableForSale();</span>
+<span class="cstat-no" title="statement not covered" >        require(amount &gt; 0 &amp;&amp; available1XMM &gt; 0, "No quantity")</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        IERC20 tokenContract = IERC20(token);</span>
+        // We check the 1XMM allowance for presale contract, in case transaction must be reverted
+<span class="cstat-no" title="statement not covered" >        require(tokenContract.allowance(msg.sender, address(this)) &gt;= amount</span>
+            &amp;&amp; tokenContract.allowance(receivingAccount, address(this)) &gt;= amount, "Allowance err");
+        
+<span class="cstat-no" title="statement not covered" >        uint256 amount1XMM = _getAmountOf1XMMForToken(token, amount);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (available1XMM &lt; amount1XMM) {</span>
+            amount = _getAmountOfTokenFor1XMM(token, available1XMM);
+            amount1XMM = available1XMM;
+        }
+        
+<span class="cstat-no" title="statement not covered" >        bool success = tokenContract.transferFrom(msg.sender, receivingAccount, amount);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (success) {</span>
+<span class="cstat-no" title="statement not covered" >            if (_transfer(msg.sender, amount1XMM)) {</span>
+<span class="cstat-no" title="statement not covered" >                emit TradeExecuted(msg.sender, token, amount, amount1XMM);</span>
+            }
+            else {
+                success = tokenContract.transferFrom(receivingAccount, msg.sender, amount);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                if (success) {</span>
+<span class="cstat-no" title="statement not covered" >                    emit TradeFailed(msg.sender, token, amount, amount1XMM);</span>
+                    revert IErrors.TransferFailed(msg.sender, token, amount, amount1XMM);
+                } else {
+<span class="cstat-no" title="statement not covered" >                    emit FailedTradeNotReverted(msg.sender, token, amount, amount1XMM);</span>
+                    revert IErrors.TransferFailedAndNotRevert(msg.sender, token, amount, amount1XMM);
+                }
+            }
+        } else {
+<span class="cstat-no" title="statement not covered" >            emit TradeFailed(msg.sender, token, amount, amount1XMM);</span>
+            revert IErrors.TransferFailed(msg.sender, token, amount, amount1XMM);
+        }
+    }
+&nbsp;
+    /// @notice Locks a specified amount of 1XMM tokens for a beneficiary.
+    /// @param beneficiary The address of the beneficiary to lock the tokens for.
+    /// @param amount1XMM The amount of 1XMM tokens to lock.
+    /// @dev This function can only be called by the owner of the contract - the function shall be called
+    ///       before executing a transfer on the TON blockchain, to ensure that the beneficiary has enough 
+    ///       locked tokens to satisfy the transfer requirements.
+<span class="fstat-no" title="function not covered" >    function lockAmount(address beneficiary, uint256 amount1XMM) external onlyOwner presaleActive {</span>
+<span class="cstat-no" title="statement not covered" >        require(availableForSale() &gt;= amount1XMM, "E101")</span>;
+        _lockedAmounts[beneficiary] += amount1XMM;
+        _totalLockedAmount += amount1XMM;
+    }
+&nbsp;
+&nbsp;
+    /// @notice Transfers a specified amount of 1XMM tokens to a beneficiary
+    /// @param to The address of the beneficiary
+    /// @param tokenType The type of the token which were provided by `to` on the TON blockchain.
+    /// @param amount The amount of `tokenType` tokens which were provided.
+    /// @param amount1XMM The amount of 1XMM tokens to transfer to `to`.
+<span class="fstat-no" title="function not covered" >    function transfer(address to, uint8 tokenType, uint256 amount, uint256 amount1XMM) external onlyOwner presaleActive returns(bool) {</span>
+<span class="cstat-no" title="statement not covered" >        require(_lockedAmounts[to] &gt;= amount1XMM, "E102")</span>;
+        _lockedAmounts[to] -= amount1XMM;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        bool success = _transfer(to, amount1XMM);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (success) {</span>
+<span class="cstat-no" title="statement not covered" >            unlockAmount(to, amount1XMM)</span>;
+<span class="cstat-no" title="statement not covered" >            emit TONTradeExecuted(to, TONTokenType(tokenType), amount, amount1XMM);</span>
+            
+        } else {
+<span class="cstat-no" title="statement not covered" >            emit TONTradeFailed(to, TONTokenType(tokenType), amount, amount1XMM);</span>
+            revert IErrors.TransferForTONFailed(to, TONTokenType(tokenType), amount, amount1XMM);
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return success;</span>
+    }
+&nbsp;
+    /// @notice Unlocks a specified amount of 1XMM tokens for `forBeneficiary`.
+    /// @dev This function can only be called by the owner of the contract - function is called
+    ///       to unlock tokens that were locked for a beneficiary, in case a transfer was not executed.
+<span class="fstat-no" title="function not covered" >    function unlockAmount(address forBeneficiary, uint256 amount1XMM) public onlyOwner presaleActive {</span>
+<span class="cstat-no" title="statement not covered" >        require(_lockedAmounts[forBeneficiary] &gt;= amount1XMM, "E103")</span>;
+        _lockedAmounts[forBeneficiary] -= amount1XMM;
+        _totalLockedAmount -= amount1XMM;
+    }
+&nbsp;
+    /// @notice Ends the presale by setting the end time to the current block timestamp.
+<span class="fstat-no" title="function not covered" >    function endPresale() external onlyOwner {</span>
+        presaleEndTime = block.timestamp;
+    }
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jul 04 2025 11:17:54 GMT+0700 (Indochina Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

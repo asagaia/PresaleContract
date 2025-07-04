@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts\paymentmanager.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> paymentmanager.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/22</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/18</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/41</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity &gt;= 0.8.20;
+&nbsp;
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { MembersOnly } from "./membersonly.sol";
+import { TokenPrice } from "../structures/token_price.sol";
+import { TONTokenType } from "./enums.sol";
+&nbsp;
+import { console } from "hardhat/console.sol";
+&nbsp;
+abstract contract PaymentManager is MembersOnly {
+    /*************
+     * Events    *
+     *************/
+    event TradeExecuted(address indexed to, address fromToken, uint256 fromAmount, uint256 amount1XMM);
+    event TradeFailed(address indexed to, address fromToken, uint256 fromAmount, uint256 amount1XMM);
+    event FailedTradeNotReverted(address indexed to, address fromToken, uint256 fromAmount, uint256 amount1XMM);
+    event TONTradeExecuted(address indexed to, TONTokenType fromToken, uint256 fromAmount, uint256 amount1XMM);
+    event TONTradeFailed(address indexed to, TONTokenType fromToken, uint256 fromAmount, uint256 amount1XMM);
+&nbsp;
+    /*************
+     * Modifiers *
+     *************/
+<span class="fstat-no" title="function not covered" >    modifier onlyAuthorizedToken(address token) {</span>
+<span class="cstat-no" title="statement not covered" >        require(token == address(0) || _authorizedTokens[token], "E1")</span>;
+        _;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    modifier notUSD(address token) {</span>
+<span class="cstat-no" title="statement not covered" >        require(token != address(0xdAC17F958D2ee523a2206206994597C13D831ec7) &amp;&amp; // USDT</span>
+                token != address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48) &amp;&amp; // USDC
+                token != address(0x6B175474E89094C44Da98b954EedeAC495271d0F), // DAI
+                "E3");
+        _;
+    }
+&nbsp;
+    /**************
+     * Properties *
+     **************/
+    address public immutable ONEXMM;
+    // The initial price of 1 XMM token in USD, with 4 digits precision (e.g., 500 for $0.05)
+    uint32 public immutable Initial1XMMPrice_USD;
+&nbsp;
+    /******************
+     * Private Fields *
+     ******************/
+    IERC20 internal immutable _onexmmToken;
+    uint32 constant private PRECISION = 10_000; // 4 digits precision (0.0001)
+    address[] private _authorizedTokensList; // List of authorized tokens for easier iteration
+&nbsp;
+    mapping(address token =&gt; bool isAuthorized) private _authorizedTokens;
+    // Prices are expressed with 4 digits precision (0.0001)
+    // The price is expressed as a conversion value to 1XMM token
+    mapping(address token =&gt; TokenPrice) private _exchangePrices;
+&nbsp;
+    /// @dev The contract constructor
+    /// @param _initial1XMMPrice_USD The initial price of 1 XMM token in USD, with 4 digits precision (e.g., 500 for $0.05, or 5 US cents))
+<span class="fstat-no" title="function not covered" >    constructor(address _1xmmAddress, uint32 _initial1XMMPrice_USD) MembersOnly() {</span>
+        ONEXMM = _1xmmAddress;
+        _onexmmToken = IERC20(_1xmmAddress);
+&nbsp;
+        // We add the default authorized tokens
+        _authorizedTokens[address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2)] = true; // WETH
+        _authorizedTokens[address(0xdAC17F958D2ee523a2206206994597C13D831ec7)] = true; // USDT
+        _authorizedTokens[address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48)] = true; // USDC
+        _authorizedTokens[address(0x6B175474E89094C44Da98b954EedeAC495271d0F)] = true; // DAI
+&nbsp;
+        // We add the default prices
+<span class="cstat-no" title="statement not covered" >        uint32 precisionSq = PRECISION * PRECISION;</span>
+<span class="cstat-no" title="statement not covered" >        uint32 usdTo1XMM = precisionSq / _initial1XMMPrice_USD;</span>
+<span class="cstat-no" title="statement not covered" >        uint32 ethPrice = uint32(uint64(2_450) * precisionSq / _initial1XMMPrice_USD);</span> // 1 ETH = $2,450
+&nbsp;
+        _exchangePrices[address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2)] = TokenPrice(ethPrice, 18); // WETH
+        _exchangePrices[address(0xdAC17F958D2ee523a2206206994597C13D831ec7)] = TokenPrice(usdTo1XMM, 6); // USDT
+        _exchangePrices[address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48)] = TokenPrice(usdTo1XMM, 6); // USDC
+        _exchangePrices[address(0x6B175474E89094C44Da98b954EedeAC495271d0F)] = TokenPrice(usdTo1XMM, 18); // DAI
+&nbsp;
+        Initial1XMMPrice_USD = _initial1XMMPrice_USD;
+<span class="cstat-no" title="statement not covered" >        _authorizedTokensList.push(address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2))</span>; // WETH
+<span class="cstat-no" title="statement not covered" >        _authorizedTokensList.push(address(0xdAC17F958D2ee523a2206206994597C13D831ec7))</span>; // USDT
+<span class="cstat-no" title="statement not covered" >        _authorizedTokensList.push(address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48))</span>; // USDC
+<span class="cstat-no" title="statement not covered" >        _authorizedTokensList.push(address(0x6B175474E89094C44Da98b954EedeAC495271d0F))</span>; // DAI
+    }
+&nbsp;
+    /// @notice Returns the list of tokens authorized for payments.
+<span class="fstat-no" title="function not covered" >    function authorizedTokens() external view returns (address[] memory) {</span>
+<span class="cstat-no" title="statement not covered" >        return _authorizedTokensList;</span>
+    }
+&nbsp;
+    /// @notice Adds a new authorized token to the contract.
+    /// @param token The address of the token to authorize.
+    /// @param decimals The number of decimals for the token.
+    /// @param price The price of the token in relation to 1 XMM, with 4 digits precision; for 1 token, user gets `price` 1XMM tokens.
+<span class="fstat-no" title="function not covered" >    function addAuthorizedToken(address token, uint8 decimals, uint32 price) external onlyOwner {</span>
+<span class="cstat-no" title="statement not covered" >        require(!_authorizedTokens[token], "E2")</span>;
+&nbsp;
+        _authorizedTokens[token] = true;
+<span class="cstat-no" title="statement not covered" >        _authorizedTokensList.push(token)</span>;
+        _exchangePrices[token] = TokenPrice(uint32((price * PRECISION) / Initial1XMMPrice_USD), decimals);
+    }
+&nbsp;
+    /// @notice Gets the exchange price for a specific token.
+    /// @dev The price is expressed as a conversion value to 1 XMM token, with 4digits precision
+    /// @param token The address of the token to get the price for.
+<span class="fstat-no" title="function not covered" >    function getPrice(address token) external view onlyAuthorizedToken(token) returns (uint32) {</span>
+<span class="cstat-no" title="statement not covered" >        if (token == address(0)) {</span>
+            // If the token is ETH, we return the price for WETH
+            token = address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return _exchangePrices[token].price;</span>
+    }
+&nbsp;
+    /// @notice Sets a new exchange price for a token.
+    /// @dev The price is expressed as a conversion value to 1 XMM token, with 4 digits precision; for 1 token, user gets `price` 1XMM tokens.
+<span class="fstat-no" title="function not covered" >    function setPrice(address token, uint32 price) external onlyOwner notUSD(token) {</span>
+        _exchangePrices[token].price = uint32((uint64(price) * PRECISION) / Initial1XMMPrice_USD);
+    }
+&nbsp;
+    /********************************
+     * Internal and Private Methods *
+     ********************************/
+<span class="fstat-no" title="function not covered" >    function _availableForSale() internal view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        return _onexmmToken.balanceOf(address(this));</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function _transfer(address to, uint256 amount1XMM) internal returns(bool) {</span>
+<span class="cstat-no" title="statement not covered" >        return _onexmmToken.transfer(to, amount1XMM);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function _getAmountOf1XMMForToken(address token, uint256 amount) internal view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        TokenPrice storage tokenPrice = _exchangePrices[token];</span>
+<span class="cstat-no" title="statement not covered" >        uint256 onexmmAmount = amount * tokenPrice.price * (10 ** (18 - tokenPrice.decimals));</span> // Adjust for tokens' decimal
+        onexmmAmount /= PRECISION; // Adjust for price precision
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return onexmmAmount;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function _getAmountOfTokenFor1XMM(address token, uint256 amount1XMM) internal view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        TokenPrice storage tokenPrice = _exchangePrices[token];</span>
+<span class="cstat-no" title="statement not covered" >        uint256 tokenAmount = amount1XMM * PRECISION / tokenPrice.price;</span> // Adjust for price precision
+        tokenAmount *= (10 ** (tokenPrice.decimals - 18)); // Adjust for tokens' decimal
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return tokenAmount;</span>
+    }
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jul 04 2025 11:17:54 GMT+0700 (Indochina Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
