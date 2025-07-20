@@ -20,28 +20,28 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/4</span>
+        <span class='fraction'>6/6</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">80% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/6</span>
+        <span class='fraction'>8/10</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/6</span>
+        <span class='fraction'>8/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/8</span>
+        <span class='fraction'>10/10</span>
       </div>
     </div>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -89,7 +89,18 @@
 44
 45
 46
-47</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -97,17 +108,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">46×</span>
+<span class="cline-any cline-yes">43×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-yes">10×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -117,23 +124,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">21×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
 pragma solidity &gt;= 0.8.20;
@@ -142,13 +164,13 @@ abstract contract MembersOnly {
     /*************
      * Modifiers *
      *************/
-<span class="fstat-no" title="function not covered" >    modifier onlyOwner() {</span>
-<span class="cstat-no" title="statement not covered" >        require(msg.sender == owner, "E0")</span>;
+    modifier onlyOwner() {
+        require(msg.sender == owner, "E0");
         _;
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    modifier onlyAuthorizedUser() {</span>
-<span class="cstat-no" title="statement not covered" >        require(_authorizedUsers[msg.sender], "No auth.")</span>;
+    modifier onlyAuthorizedUser() {
+        require(_authorizedUsers[msg.sender], "No auth.");
         _;
     }
 &nbsp;
@@ -162,24 +184,35 @@ abstract contract MembersOnly {
      ******************/
     mapping(address user =&gt; bool isAuthorized) private _authorizedUsers;
 &nbsp;
-<span class="fstat-no" title="function not covered" >    constructor() {</span>
+    constructor() {
         owner = msg.sender;
     }
 &nbsp;
     /// @notice Adds an authorized user to the contract.
-<span class="fstat-no" title="function not covered" >    function addAuthorizedUser(address user) external onlyOwner {</span>
+    function addAuthorizedUser(address user) external onlyOwner {
         _authorizedUsers[user] = true;
     }
 &nbsp;
+    /// @notice Adds a list of authorized users to the contract.
+    function addAuthorizedUsers(address[] memory users) external <span class="missing-if-branch" title="else path not taken" >E</span>onlyOwner {
+        for (uint16 i = 0; i &lt; users.length; i++) _authorizedUsers[users[i]] = true;
+    }
+&nbsp;
     /// @notice Checks if a user is authorized.
-<span class="fstat-no" title="function not covered" >    function isAuthorized() public view returns (bool) {</span>
-<span class="cstat-no" title="statement not covered" >        return isAuthorized(msg.sender);</span>
+    function isAuthorized() public view returns (bool) {
+        return _isAuthorized(msg.sender);
     }
 &nbsp;
     /// @notice Checks if a user is authorized.
     /// @param user The address of the user to check.
-<span class="fstat-no" title="function not covered" >    function isAuthorized(address user) internal view returns (bool) {</span>
-<span class="cstat-no" title="statement not covered" >        return _authorizedUsers[user];</span>
+    function isAuthorized(address user) external view <span class="missing-if-branch" title="else path not taken" >E</span>onlyOwner returns (bool) {
+        return _isAuthorized(user);
+    }
+&nbsp;
+    /// @notice Checks if a user is authorized.
+    /// @param user The address of the user to check.
+    function _isAuthorized(address user) internal view returns (bool) {
+        return _authorizedUsers[user];
     }
 }</pre></td></tr>
 </table></pre>
@@ -187,7 +220,7 @@ abstract contract MembersOnly {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jul 04 2025 11:17:54 GMT+0700 (Indochina Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Jul 20 2025 14:32:22 GMT+0800 (Singapore Standard Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

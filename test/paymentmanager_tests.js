@@ -21,15 +21,6 @@ async function deploy() {
 }
 
 describe('Test payment manager functions', function () {
-    it('Only owner can add authorized user', async function () {
-        const [owner, spender, pscontract, dummy1XMM] = await deploy();
-
-        expect(await pscontract.connect(spender).isAuthorized()).to.be.false;
-        await expect(pscontract.connect(spender).addAuthorizedUser(spender.address)).to.be.revertedWith('E0');
-        await pscontract.addAuthorizedUser(spender.address);
-        expect(await pscontract.connect(spender).isAuthorized()).to.be.true;
-    });
-
     it('Has the right prices', async function () {
         const [owner, spender, pscontract, dummy1XMM] = await deploy();
 
@@ -58,5 +49,14 @@ describe('Test payment manager functions', function () {
 
         await pscontract.setPrice("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", 26_000_000);
         expect(await pscontract.getPrice("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")).to.equal(2_600n * 20n * precision); // 26_000_000 / 0.05
+    });
+
+    it('Can return the list of authorized tokens', async function() {
+        const [owner, spender, pscontract, dummy1XMM] = await deploy();
+
+        const authorizedTokens = await pscontract.authorizedTokens();
+        expect(authorizedTokens.length).to.equal(4);
+        // Address at index 2 is USDC address
+        expect(authorizedTokens[2]).to.equal("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48");
     });
 });

@@ -20,6 +20,8 @@ async function deploy() {
   await dummyToken.transfer(spender, 20_000n * decimalAdjustment);
 
   const dummy1XMMAddress = await dummy1XMM.getAddress();
+  // 5 US cents equals to 500 with 4-digits precision
+  // Or, 20 1XMM equal 1 USD
   const pscontract = await contractFactory.deploy(owner, dummy1XMMAddress, timeNow + 1200000, timeNow + 4800000, 500);
 
   const pscontractAddress = await pscontract.getAddress();
@@ -140,8 +142,7 @@ describe('Test presale contract functions', function () {
       await time.increase(1200000);
 
       // We authorized dummy token
-      await pscontract.addAuthorizedToken(await dummyToken.getAddress(), 18, 50_000n * precision); // 1 dummy token = 100,000 1XMM
-      console.log("Price", await pscontract.getPrice(await dummyToken.getAddress()));
+      await pscontract.addAuthorizedToken(await dummyToken.getAddress(), 18, 50_000n * precision); // 1 dummy token = 1,000,000 1XMM
 
       // Spender is authorized
       await pscontract.addAuthorizedUser(spender);
@@ -179,11 +180,130 @@ describe('Test presale contract functions', function () {
       expect(expectedAmount).to.equal(100n * decimalAdjustment * price / precision);
     });
 
-    it('Can exchange tokens while some are locked', async function () {
-      
+    it('Can lock and unlock tokens', async function () {
+      const [manager, spender, pscontract, dummy1XMM, dummyToken] = await deploy();
+      const availableForSale = await pscontract.availableForSale();
+      const toBeLocked = availableForSale / 50n;
+
+      // We increase time to make presale active
+      await time.increase(1200000);
+
+      // Unlock cannot work if no amount was already locked
+      await expect(pscontract.unlockAmount(spender, 1n)).to.revertedWith("E103");
+
+      // We cannot lock more than available
+      await expect(pscontract.lockAmount(spender, availableForSale + 1n)).to.revertedWith("E101");
+      // Now we lock the tokens
+      await pscontract.lockAmount(spender, toBeLocked);
+
+      expect(await pscontract.availableForSale()).to.equal(availableForSale - toBeLocked);
+      await expect(pscontract.unlockAmount(spender, toBeLocked + 1n)).to.revertedWith("E103");
+
+      await pscontract.unlockAmount(spender, toBeLocked / 2n);
+      expect (await pscontract.availableForSale()).to.equal(availableForSale - toBeLocked / 2n);
     });
 
-    it('Can manage tokens with 6 decimals', async function () {
-      throw new Error();
+    it('Can transfer locked tokens', async function () {
+      const [manager, spender, pscontract, dummy1XMM, dummyToken] = await deploy();
+      const availableForSale = await pscontract.availableForSale();
+
+      // A user wants to purchase 20,000 1XMM tokens
+      const toBeLocked = availableForSale / 50n;
+
+      // We cannot transfer if presale is not active
+      await expect(pscontract.transfer(spender, 1, 1_000n * BigInt(10**6), toBeLocked)).to.revertedWith("E100");
+
+      // We increase time to make presale active
+      await time.increase(1200000);
+
+      // We lock the tokens
+      await pscontract.lockAmount(spender, toBeLocked);
+
+      // Only owner can do the transfer
+      await expect(pscontract.connect(spender).transfer(spender, 1, 1_000n * BigInt(10**6), toBeLocked)).to.revertedWith("E0");
+
+      // We cannot transfer more than what was locked
+      await expect(pscontract.transfer(spender, 1, 1_000n * BigInt(10**6), toBeLocked + 1n)).to.revertedWith("E102");
+
+      await expect(pscontract.transfer(spender, 1, 1_000n * BigInt(10**6), toBeLocked)).to.emit(pscontract, "TONTradeExecuted");
+      expect(await pscontract.availableForSale()).to.equal(availableForSale - toBeLocked);
+    });
+
+    it('Can exchange tokens while some are locked', async function () {
+      const [manager, spender, pscontract, dummy1XMM, dummyToken] = await deploy();
+
+      const availableForSale = await pscontract.availableForSale();
+      const initialBalance = await dummyToken.balanceOf(spender);
+      const toBeLocked = availableForSale / 2n;
+
+      // We increase time to make presale active
+      await time.increase(1200000);
+
+      await expect(pscontract.lockAmount(spender, availableForSale + 1n)).to.revertedWith("E101");
+      await pscontract.lockAmount(spender, toBeLocked);
+
+      const newAvailable = await pscontract.availableForSale();
+      expect(newAvailable).to.equal(availableForSale - toBeLocked);
+
+      // We authorized dummy token
+      await pscontract.addAuthorizedToken(await dummyToken.getAddress(), 18, 1_000n * precision); // 1 dummy token = 20,000 1XMM
+
+      // Spender is authorized
+      await pscontract.addAuthorizedUser(spender);
+
+      // Spender gives allowance to smart contract for transfer of dummyToken
+      await dummyToken.connect(spender).approve(await pscontract.getAddress(), 26n * decimalAdjustment);
+
+      // We try to exchange more than available
+      await expect(pscontract.connect(spender).exchangeToken(dummyToken, 26n * decimalAdjustment)).to.be.emit(pscontract, "TradeExecuted");
+      expect (await dummy1XMM.balanceOf(spender)).to.equal(newAvailable);
+      expect (await dummyToken.balanceOf(spender)).to.equal(initialBalance - 25n * decimalAdjustment)
+    });
+
+    it('Can send back remaining 1XMM tokens to 1XMM contract', async function () {
+      const [manager, spender, pscontract, dummy1XMM, dummyToken] = await deploy();
+
+      const initialBalance = await dummy1XMM.balanceOf(dummy1XMM)
+
+      // We increase time to make presale active
+      await time.increase(1200000);
+
+      // We authorized dummy token
+      await pscontract.addAuthorizedToken(await dummyToken.getAddress(), 18, 1_000n * precision); // 1 dummy token = 20,000 1XMM
+
+      // Spender is authorized
+      await pscontract.addAuthorizedUser(spender);
+
+      // Spender gives allowance to smart contract for transfer of dummyToken
+      await dummyToken.connect(spender).approve(await pscontract.getAddress(), 25n * decimalAdjustment);
+
+      // Spender buys 500,000 1XMM tokens
+      await pscontract.connect(spender).exchangeToken(dummyToken, 25n * decimalAdjustment);
+
+      // 500,000 1XMM tokens are transferred back to the 1XMM contract
+      await pscontract.transferRemainingTokens();
+
+      expect(await dummy1XMM.balanceOf(dummy1XMM)).to.equal(initialBalance + 500_000n * decimalAdjustment);
+    });
+
+    it ('Ends presale if there is no more 1XMM tokens', async function() {
+      const [manager, spender, pscontract, dummy1XMM, dummyToken] = await deploy();
+
+      // We increase time to make presale active
+      await time.increase(1200000);
+
+      // We authorized dummy token
+      await pscontract.addAuthorizedToken(await dummyToken.getAddress(), 18, 5_000n * precision); // 1 dummy token = 100,000 1XMM
+
+      // Spender is authorized
+      await pscontract.addAuthorizedUser(spender);
+
+      // Spender gives allowance to smart contract for transfer of dummyToken
+      await dummyToken.connect(spender).approve(await pscontract.getAddress(), 25n * decimalAdjustment);
+
+      // Spender buys 1,000,000 1XMM tokens
+      await pscontract.connect(spender).exchangeToken(dummyToken, 25n * decimalAdjustment);
+
+      expect (await pscontract.isActive()).to.equal(false);
     });
 });

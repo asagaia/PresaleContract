@@ -13,8 +13,6 @@ abstract contract PaymentManager is MembersOnly {
      * Events    *
      *************/
     event TradeExecuted(address indexed to, address fromToken, uint256 fromAmount, uint256 amount1XMM);
-    event TradeFailed(address indexed to, address fromToken, uint256 fromAmount, uint256 amount1XMM);
-    event FailedTradeNotReverted(address indexed to, address fromToken, uint256 fromAmount, uint256 amount1XMM);
     event TONTradeExecuted(address indexed to, TONTokenType fromToken, uint256 fromAmount, uint256 amount1XMM);
     event TONTradeFailed(address indexed to, TONTokenType fromToken, uint256 fromAmount, uint256 amount1XMM);
 

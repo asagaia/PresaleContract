@@ -91,12 +91,10 @@ contract PresaleContract is PaymentManager {
 
         // If transfer fails, we refund the Ether
         if (_transfer(msg.sender, amount1XMM)) {
+            if (availableForSale() == 0) _endPresale();
             emit TradeExecuted(msg.sender, address(0), amount, amount1XMM);
         } else {
-            // We keep track record of failed trades
-            // and revert the transaction to refund the Ether
-            emit TradeFailed(msg.sender, address(0), amount, amount1XMM);
-            payable(msg.sender).transfer(amount);
+            // We trigger an error
             revert IErrors.TransferFailed(msg.sender, address(0), amount, amount1XMM);
         }
     }
@@ -131,26 +129,20 @@ contract PresaleContract is PaymentManager {
         // If it is successful, we proceed to transfer token to the receiving account
         bool success = SafeERC20.trySafeTransferFrom(tokenContract, msg.sender, address(this), amount);
 
-        if (success) {
-            if (_transfer(msg.sender, amount1XMM)) {
-                SafeERC20.safeTransfer(tokenContract, receivingAccount, amount);
-                emit TradeExecuted(msg.sender, token, amount, amount1XMM);
-            }
-            else {
-                success = SafeERC20.trySafeTransfer(tokenContract, msg.sender, amount);
-
-                if (success) {
-                    emit TradeFailed(msg.sender, token, amount, amount1XMM);
-                    revert IErrors.TransferFailed(msg.sender, token, amount, amount1XMM);
-                } else {
-                    emit FailedTradeNotReverted(msg.sender, token, amount, amount1XMM);
-                    revert IErrors.TransferFailedAndNotRevert(msg.sender, token, amount, amount1XMM);
-                }
-            }
+        if (success && _transfer(msg.sender, amount1XMM)) {
+            SafeERC20.safeTransfer(tokenContract, receivingAccount, amount);
+            if (availableForSale() == 0) _endPresale();
+            emit TradeExecuted(msg.sender, token, amount, amount1XMM);
         } else {
-            emit TradeFailed(msg.sender, token, amount, amount1XMM);
             revert IErrors.TransferFailed(msg.sender, token, amount, amount1XMM);
         }
+    }
+
+    /// @notice If there is a remaining balance of token, transfers it back to the receiving account
+    /// @dev This function should be called 
+    function transferAuthorizedTokensToReceivingAccount(address token) external onlyOwner {
+        IERC20 tokenContract = IERC20(token);
+        SafeERC20.safeTransfer(tokenContract, receivingAccount, tokenContract.balanceOf(address(this)));
     }
 
     /// @notice Locks a specified amount of 1XMM tokens for a beneficiary.
@@ -173,8 +165,6 @@ contract PresaleContract is PaymentManager {
     /// @param amount1XMM The amount of 1XMM tokens to transfer to `to`.
     function transfer(address to, uint8 tokenType, uint256 amount, uint256 amount1XMM) external onlyOwner presaleActive returns(bool) {
         require(_lockedAmounts[to] >= amount1XMM, "E102");
-        _lockedAmounts[to] -= amount1XMM;
-
         bool success = _transfer(to, amount1XMM);
 
         if (success) {
@@ -189,6 +179,13 @@ contract PresaleContract is PaymentManager {
         return success;
     }
 
+    /// @notice Transfers the remaining amount of 1XMM tokens to the 1XMM smart contract
+    /// @dev This automatically ends the pre-sale
+    function transferRemainingTokens() public onlyOwner {
+        _onexmmToken.transfer(ONEXMM, availableForSale());
+        _endPresale();
+    }
+
     /// @notice Unlocks a specified amount of 1XMM tokens for `forBeneficiary`.
     /// @dev This function can only be called by the owner of the contract - function is called
     ///       to unlock tokens that were locked for a beneficiary, in case a transfer was not executed.
@@ -200,6 +197,10 @@ contract PresaleContract is PaymentManager {
 
     /// @notice Ends the presale by setting the end time to the current block timestamp.
     function endPresale() external onlyOwner {
+        presaleEndTime = block.timestamp;
+    }
+
+    function _endPresale() private {
         presaleEndTime = block.timestamp;
     }
 }

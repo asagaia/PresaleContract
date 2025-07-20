@@ -34,14 +34,25 @@ abstract contract MembersOnly {
         _authorizedUsers[user] = true;
     }
 
+    /// @notice Adds a list of authorized users to the contract.
+    function addAuthorizedUsers(address[] memory users) external onlyOwner {
+        for (uint16 i = 0; i < users.length; i++) _authorizedUsers[users[i]] = true;
+    }
+
     /// @notice Checks if a user is authorized.
     function isAuthorized() public view returns (bool) {
-        return isAuthorized(msg.sender);
+        return _isAuthorized(msg.sender);
     }
 
     /// @notice Checks if a user is authorized.
     /// @param user The address of the user to check.
-    function isAuthorized(address user) internal view returns (bool) {
+    function isAuthorized(address user) external view onlyOwner returns (bool) {
+        return _isAuthorized(user);
+    }
+
+    /// @notice Checks if a user is authorized.
+    /// @param user The address of the user to check.
+    function _isAuthorized(address user) internal view returns (bool) {
         return _authorizedUsers[user];
     }
 }
