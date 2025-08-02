@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >= 0.8.20;
+pragma solidity ^0.8.30;
 
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { MembersOnly } from "./membersonly.sol";
 import { TokenPrice } from "../structures/token_price.sol";
 import { TONTokenType } from "./enums.sol";
-
-import { console } from "hardhat/console.sol";
 
 abstract contract PaymentManager is MembersOnly {
     /*************

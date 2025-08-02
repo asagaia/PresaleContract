@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >= 0.8.20;
+pragma solidity ^0.8.30;
 
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { IUSDT } from "./interfaces/IUSDT.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import { SafeUSDT } from "./safe/safeusdt.sol";
 import { IErrors } from "./errors.sol";
 import { PaymentManager } from "./paymentmanager.sol";
 import { TONTokenType } from "./enums.sol";
@@ -113,9 +115,13 @@ contract PresaleContract is PaymentManager {
         uint256 available1XMM = availableForSale();
         require(amount > 0 && available1XMM > 0, "No quantity");
 
-        IERC20 tokenContract = IERC20(token);
+        bool isUSDT = (token == address(0xdAC17F958D2ee523a2206206994597C13D831ec7));
+
+        uint allowance = isUSDT 
+            ? IUSDT(token).allowance(msg.sender, address(this)) 
+            : IERC20(token).allowance(msg.sender, address(this));
         // We check the 1XMM allowance for presale contract, in case transaction must be reverted
-        require(tokenContract.allowance(msg.sender, address(this)) >= amount, "Allowance err");
+        require(allowance >= amount, "Allowance err");
         
         uint256 amount1XMM = _getAmountOf1XMMForToken(token, amount);
 
@@ -127,10 +133,14 @@ contract PresaleContract is PaymentManager {
         // First, we transfer the tokens to the smart contract
         // If the transfer fails, we revert the transaction to refund the tokens
         // If it is successful, we proceed to transfer token to the receiving account
-        bool success = SafeERC20.trySafeTransferFrom(tokenContract, msg.sender, address(this), amount);
+        bool success = isUSDT 
+            ? SafeUSDT.trySafeTransferFrom(IUSDT(token), msg.sender, address(this), amount)
+            : SafeERC20.trySafeTransferFrom(IERC20(token), msg.sender, address(this), amount);
 
         if (success && _transfer(msg.sender, amount1XMM)) {
-            SafeERC20.safeTransfer(tokenContract, receivingAccount, amount);
+            if (isUSDT) SafeUSDT.safeTransfer(IUSDT(token), receivingAccount, amount);
+            else SafeERC20.safeTransfer(IERC20(token), receivingAccount, amount);
+
             if (availableForSale() == 0) _endPresale();
             emit TradeExecuted(msg.sender, token, amount, amount1XMM);
         } else {
@@ -141,8 +151,15 @@ contract PresaleContract is PaymentManager {
     /// @notice If there is a remaining balance of token, transfers it back to the receiving account
     /// @dev This function should be called 
     function transferAuthorizedTokensToReceivingAccount(address token) external onlyOwner {
-        IERC20 tokenContract = IERC20(token);
-        SafeERC20.safeTransfer(tokenContract, receivingAccount, tokenContract.balanceOf(address(this)));
+        bool isUSDT = (token == address(0xdAC17F958D2ee523a2206206994597C13D831ec7));
+        
+        if (isUSDT) {
+            IUSDT tokenContract = IUSDT(token);
+            tokenContract.transfer(receivingAccount, tokenContract.balanceOf(address(this)));
+        } else {
+            IERC20 tokenContract = IERC20(token);
+            SafeERC20.safeTransfer(tokenContract, receivingAccount, tokenContract.balanceOf(address(this)));
+        }
     }
 
     /// @notice Locks a specified amount of 1XMM tokens for a beneficiary.

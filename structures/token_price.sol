@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >= 0.8.20;
+pragma solidity ^0.8.30;
 
 struct TokenPrice {
     uint64 price;         // The amount of 1XMM tokens per 1 unit of this token

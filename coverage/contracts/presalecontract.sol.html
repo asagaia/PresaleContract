@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">87.76% </span>
+        <span class="strong">80.36% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>43/49</span>
+        <span class='fraction'>45/56</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">67.57% </span>
+        <span class="strong">64.63% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>50/74</span>
+        <span class='fraction'>53/82</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">82.35% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>14/17</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">80.6% </span>
+        <span class="strong">76.39% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>54/67</span>
+        <span class='fraction'>55/72</span>
       </div>
     </div>
   </div>
@@ -248,7 +248,26 @@
 203
 204
 205
-206</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -367,6 +386,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6×</span>
@@ -379,8 +402,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6×</span>
 <span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6×</span>
 <span class="cline-any cline-yes">6×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -392,7 +419,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -454,10 +488,12 @@
 <span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
-pragma solidity &gt;= 0.8.20;
+pragma solidity ^0.8.30;
 &nbsp;
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { IUSDT } from "./interfaces/IUSDT.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import { SafeUSDT } from "./safe/safeusdt.sol";
 import { IErrors } from "./errors.sol";
 import { PaymentManager } from "./paymentmanager.sol";
 import { TONTokenType } from "./enums.sol";
@@ -568,9 +604,13 @@ contract PresaleContract is PaymentManager {
         uint256 available1XMM = availableForSale();
         <span class="missing-if-branch" title="else path not taken" >E</span>require(amount &gt; 0 &amp;&amp; available1XMM &gt; 0, "No quantity");
 &nbsp;
-        IERC20 tokenContract = IERC20(token);
+        bool isUSDT = (token == address(0xdAC17F958D2ee523a2206206994597C13D831ec7));
+&nbsp;
+        uint allowance = isUSDT 
+            ? <span class="missing-if-branch" title="if path not taken" >I</span>IUSDT(token).allowance(msg.sender, address(this)) 
+            : IERC20(token).allowance(msg.sender, address(this));
         // We check the 1XMM allowance for presale contract, in case transaction must be reverted
-        require(tokenContract.allowance(msg.sender, address(this)) &gt;= amount, "Allowance err");
+        require(allowance &gt;= amount, "Allowance err");
         
         uint256 amount1XMM = _getAmountOf1XMMForToken(token, amount);
 &nbsp;
@@ -582,10 +622,14 @@ contract PresaleContract is PaymentManager {
         // First, we transfer the tokens to the smart contract
         // If the transfer fails, we revert the transaction to refund the tokens
         // If it is successful, we proceed to transfer token to the receiving account
-        bool success = SafeERC20.trySafeTransferFrom(tokenContract, msg.sender, address(this), amount);
+        bool success = isUSDT 
+            ? <span class="missing-if-branch" title="if path not taken" >I</span>SafeUSDT.trySafeTransferFrom(IUSDT(token), msg.sender, address(this), amount)
+            : SafeERC20.trySafeTransferFrom(IERC20(token), msg.sender, address(this), amount);
 &nbsp;
         <span class="missing-if-branch" title="else path not taken" >E</span>if (success &amp;&amp; _transfer(msg.sender, amount1XMM)) {
-            SafeERC20.safeTransfer(tokenContract, receivingAccount, amount);
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (isUSDT) <span class="cstat-no" title="statement not covered" >SafeUSDT.safeTransfer(IUSDT(token), receivingAccount, amount)</span>;
+            else SafeERC20.safeTransfer(IERC20(token), receivingAccount, amount);
+&nbsp;
             if (availableForSale() == 0) _endPresale();
             emit TradeExecuted(msg.sender, token, amount, amount1XMM);
         } else {
@@ -596,8 +640,15 @@ contract PresaleContract is PaymentManager {
     /// @notice If there is a remaining balance of token, transfers it back to the receiving account
     /// @dev This function should be called 
 <span class="fstat-no" title="function not covered" >    function transferAuthorizedTokensToReceivingAccount(address token) external onlyOwner {</span>
-<span class="cstat-no" title="statement not covered" >        IERC20 tokenContract = IERC20(token);</span>
-<span class="cstat-no" title="statement not covered" >        SafeERC20.safeTransfer(tokenContract, receivingAccount, tokenContract.balanceOf(address(this)))</span>;
+<span class="cstat-no" title="statement not covered" >        bool isUSDT = (token == address(0xdAC17F958D2ee523a2206206994597C13D831ec7));</span>
+        
+<span class="cstat-no" title="statement not covered" >        if (isUSDT) {</span>
+<span class="cstat-no" title="statement not covered" >            IUSDT tokenContract = IUSDT(token);</span>
+<span class="cstat-no" title="statement not covered" >            tokenContract.transfer(receivingAccount, tokenContract.balanceOf(address(this)))</span>;
+        } else {
+<span class="cstat-no" title="statement not covered" >            IERC20 tokenContract = IERC20(token);</span>
+<span class="cstat-no" title="statement not covered" >            SafeERC20.safeTransfer(tokenContract, receivingAccount, tokenContract.balanceOf(address(this)))</span>;
+        }
     }
 &nbsp;
     /// @notice Locks a specified amount of 1XMM tokens for a beneficiary.
@@ -664,7 +715,7 @@ contract PresaleContract is PaymentManager {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Jul 20 2025 14:32:22 GMT+0800 (Singapore Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Aug 02 2025 16:54:02 GMT+0700 (Indochina Time)
 </div>
 </div>
 <script src="../prettify.js"></script>
