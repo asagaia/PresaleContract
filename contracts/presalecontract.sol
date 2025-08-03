@@ -217,6 +217,11 @@ contract PresaleContract is PaymentManager {
         presaleEndTime = block.timestamp;
     }
 
+    /// @notice Used to send ETH to the contract
+    /// @dev This method can be used by the owner to make sure there is
+    /// enough ETH on the contract to execute operations
+    receive() external payable {}
+
     function _endPresale() private {
         presaleEndTime = block.timestamp;
     }
