@@ -104,7 +104,7 @@ contract PresaleContract is PaymentManager {
     /// @notice Enables the owner to transfer a specified amount of Ether to the owner's address.
     function transferETHToReceivingAccount(uint256 value) external onlyReceivingAccountOrOwner payable {
         uint256 balance = address(this).balance;
-        if (balance <= 0 && value > balance) revert IErrors.ETHBalanceError(balance, value);
+        if (balance <= 0 || value > balance) revert IErrors.ETHBalanceError(balance, value);
         payable(receivingAccount).transfer(value);
     }
 
