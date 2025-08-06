@@ -23,9 +23,9 @@ abstract contract PaymentManager is MembersOnly {
     }
 
     modifier notUSD(address token) {
-        require(token != address(0xdAC17F958D2ee523a2206206994597C13D831ec7) && // USDT
-                token != address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48) && // USDC
-                token != address(0x6B175474E89094C44Da98b954EedeAC495271d0F), // DAI
+        require(token != USDT &&
+                token != USDC &&
+                token != DAI,
                 "E3");
         _;
     }
@@ -36,6 +36,11 @@ abstract contract PaymentManager is MembersOnly {
     address public immutable ONEXMM;
     // The initial price of 1 XMM token in USD, with 4 digits precision (e.g., 500 for $0.05)
     uint32 public immutable Initial1XMMPrice_USD;
+
+    address public immutable WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+    address public immutable USDT = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
+    address public immutable USDC = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
+    address public immutable DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
 
     /******************
      * Private Fields *
@@ -56,26 +61,26 @@ abstract contract PaymentManager is MembersOnly {
         _onexmmToken = IERC20(_1xmmAddress);
 
         // We add the default authorized tokens
-        _authorizedTokens[address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2)] = true; // WETH
-        _authorizedTokens[address(0xdAC17F958D2ee523a2206206994597C13D831ec7)] = true; // USDT
-        _authorizedTokens[address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48)] = true; // USDC
-        _authorizedTokens[address(0x6B175474E89094C44Da98b954EedeAC495271d0F)] = true; // DAI
+        _authorizedTokens[WETH] = true; // WETH
+        _authorizedTokens[USDT] = true; // USDT
+        _authorizedTokens[USDC] = true; // USDC
+        _authorizedTokens[DAI] = true; // DAI
 
         // We add the default prices
-        uint32 precisionSq = PRECISION * PRECISION;
-        uint32 usdTo1XMM = precisionSq / _initial1XMMPrice_USD;
-        uint32 ethPrice = uint32(uint64(2_450) * precisionSq / _initial1XMMPrice_USD); // 1 ETH = $2,450
+        uint64 precisionSq = PRECISION * PRECISION;
+        uint64 usdTo1XMM = precisionSq / _initial1XMMPrice_USD;
+        uint64 ethPrice = uint64(2_450) * precisionSq / _initial1XMMPrice_USD; // 1 ETH = $2,450
 
-        _exchangePrices[address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2)] = TokenPrice(ethPrice, 18); // WETH
-        _exchangePrices[address(0xdAC17F958D2ee523a2206206994597C13D831ec7)] = TokenPrice(usdTo1XMM, 6); // USDT
-        _exchangePrices[address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48)] = TokenPrice(usdTo1XMM, 6); // USDC
-        _exchangePrices[address(0x6B175474E89094C44Da98b954EedeAC495271d0F)] = TokenPrice(usdTo1XMM, 18); // DAI
+        _exchangePrices[WETH] = TokenPrice(ethPrice, 18); // WETH
+        _exchangePrices[USDT] = TokenPrice(usdTo1XMM, 6); // USDT
+        _exchangePrices[USDC] = TokenPrice(usdTo1XMM, 6); // USDC
+        _exchangePrices[DAI] = TokenPrice(usdTo1XMM, 18); // DAI
 
         Initial1XMMPrice_USD = _initial1XMMPrice_USD;
-        _authorizedTokensList.push(address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2)); // WETH
-        _authorizedTokensList.push(address(0xdAC17F958D2ee523a2206206994597C13D831ec7)); // USDT
-        _authorizedTokensList.push(address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48)); // USDC
-        _authorizedTokensList.push(address(0x6B175474E89094C44Da98b954EedeAC495271d0F)); // DAI
+        _authorizedTokensList.push(WETH); // WETH
+        _authorizedTokensList.push(USDT); // USDT
+        _authorizedTokensList.push(USDC); // USDC
+        _authorizedTokensList.push(DAI); // DAI
     }
 
     /// @notice Returns the list of tokens authorized for payments.
@@ -87,12 +92,12 @@ abstract contract PaymentManager is MembersOnly {
     /// @param token The address of the token to authorize.
     /// @param decimals The number of decimals for the token.
     /// @param price The price of the token in USD, with 4 digits precision.
-    function addAuthorizedToken(address token, uint8 decimals, uint32 price) external onlyOwner {
+    function addAuthorizedToken(address token, uint8 decimals, uint64 price) external onlyOwner {
         require(!_authorizedTokens[token], "E2");
 
         _authorizedTokens[token] = true;
         _authorizedTokensList.push(token);
-        _exchangePrices[token] = TokenPrice((uint64(price) * PRECISION) / Initial1XMMPrice_USD, decimals);
+        _exchangePrices[token] = TokenPrice((price * PRECISION) / Initial1XMMPrice_USD, decimals);
     }
 
     /// @notice Gets the exchange price for a specific token.
@@ -102,7 +107,7 @@ abstract contract PaymentManager is MembersOnly {
     function getPrice(address token) external view onlyAuthorizedToken(token) returns (uint64) {
         if (token == address(0)) {
             // If the token is ETH, we return the price for WETH
-            token = address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
+            token = WETH;
         }
 
         return _exchangePrices[token].price;
@@ -112,8 +117,8 @@ abstract contract PaymentManager is MembersOnly {
     /// @param token The address of the token to set the price for.
     /// @param price The new price of the token, in USD.
     /// @dev The price is expressed in USD, with 4 digits precision
-    function setPrice(address token, uint32 price) external onlyOwner notUSD(token) {
-        _exchangePrices[token].price = (uint64(price) * PRECISION) / Initial1XMMPrice_USD;
+    function setPrice(address token, uint64 price) external onlyOwner notUSD(token) {
+        _exchangePrices[token].price = (price * PRECISION) / Initial1XMMPrice_USD;
     }
 
     /********************************
@@ -128,6 +133,9 @@ abstract contract PaymentManager is MembersOnly {
     }
 
     function _getAmountOf1XMMForToken(address token, uint256 amount) internal view returns (uint256) {
+        // We make sure that no address 0 can be passed as arg
+        if (token == address(0)) token = WETH;
+
         TokenPrice storage tokenPrice = _exchangePrices[token];
         uint256 onexmmAmount = amount * tokenPrice.price * (10 ** (18 - tokenPrice.decimals)); // Adjust for tokens' decimal
         onexmmAmount /= PRECISION; // Adjust for price precision
@@ -136,6 +144,9 @@ abstract contract PaymentManager is MembersOnly {
     }
 
     function _getAmountOfTokenFor1XMM(address token, uint256 amount1XMM) internal view returns (uint256) {
+        // We make sure that no address 0 can be passed as arg
+        if (token == address(0)) token = WETH;
+
         TokenPrice storage tokenPrice = _exchangePrices[token];
         uint256 tokenAmount = amount1XMM * PRECISION / tokenPrice.price; // Adjust for price precision
         tokenAmount *= (10 ** (tokenPrice.decimals - 18)); // Adjust for tokens' decimal

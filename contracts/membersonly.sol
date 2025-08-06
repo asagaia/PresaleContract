@@ -2,6 +2,11 @@
 pragma solidity ^0.8.30;
 
 abstract contract MembersOnly {
+    /**********
+     * Events *
+     **********/
+    event AuthorizedUserAdded(address indexed user);
+
     /*************
      * Modifiers *
      *************/
@@ -32,6 +37,7 @@ abstract contract MembersOnly {
     /// @notice Adds an authorized user to the contract.
     function addAuthorizedUser(address user) external onlyOwner {
         _authorizedUsers[user] = true;
+        emit AuthorizedUserAdded(user);
     }
 
     /// @notice Adds a list of authorized users to the contract.

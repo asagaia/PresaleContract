@@ -22,12 +22,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>22/22</span>
+        <span class='fraction'>24/24</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">94.44% </span>
+        <span class="strong">86.36% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>17/18</span>
+        <span class='fraction'>19/22</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>41/41</span>
+        <span class='fraction'>43/43</span>
       </div>
     </div>
   </div>
@@ -187,7 +187,18 @@
 142
 143
 144
-145</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -217,6 +228,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -317,6 +333,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12×</span>
 <span class="cline-any cline-yes">12×</span>
 <span class="cline-any cline-yes">12×</span>
@@ -324,6 +343,9 @@
 <span class="cline-any cline-yes">12×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-yes">3×</span>
@@ -356,9 +378,9 @@ abstract contract PaymentManager is MembersOnly {
     }
 &nbsp;
     modifier notUSD(address token) {
-        require(token != address(0xdAC17F958D2ee523a2206206994597C13D831ec7) &amp;&amp; // USDT
-                token != address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48) &amp;&amp; // USDC
-                token != address(0x6B175474E89094C44Da98b954EedeAC495271d0F), // DAI
+        require(token != USDT &amp;&amp;
+                token != USDC &amp;&amp;
+                token != DAI,
                 "E3");
         _;
     }
@@ -369,6 +391,11 @@ abstract contract PaymentManager is MembersOnly {
     address public immutable ONEXMM;
     // The initial price of 1 XMM token in USD, with 4 digits precision (e.g., 500 for $0.05)
     uint32 public immutable Initial1XMMPrice_USD;
+&nbsp;
+    address public immutable WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+    address public immutable USDT = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
+    address public immutable USDC = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
+    address public immutable DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
 &nbsp;
     /******************
      * Private Fields *
@@ -389,26 +416,26 @@ abstract contract PaymentManager is MembersOnly {
         _onexmmToken = IERC20(_1xmmAddress);
 &nbsp;
         // We add the default authorized tokens
-        _authorizedTokens[address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2)] = true; // WETH
-        _authorizedTokens[address(0xdAC17F958D2ee523a2206206994597C13D831ec7)] = true; // USDT
-        _authorizedTokens[address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48)] = true; // USDC
-        _authorizedTokens[address(0x6B175474E89094C44Da98b954EedeAC495271d0F)] = true; // DAI
+        _authorizedTokens[WETH] = true; // WETH
+        _authorizedTokens[USDT] = true; // USDT
+        _authorizedTokens[USDC] = true; // USDC
+        _authorizedTokens[DAI] = true; // DAI
 &nbsp;
         // We add the default prices
-        uint32 precisionSq = PRECISION * PRECISION;
-        uint32 usdTo1XMM = precisionSq / _initial1XMMPrice_USD;
-        uint32 ethPrice = uint32(uint64(2_450) * precisionSq / _initial1XMMPrice_USD); // 1 ETH = $2,450
+        uint64 precisionSq = PRECISION * PRECISION;
+        uint64 usdTo1XMM = precisionSq / _initial1XMMPrice_USD;
+        uint64 ethPrice = uint64(2_450) * precisionSq / _initial1XMMPrice_USD; // 1 ETH = $2,450
 &nbsp;
-        _exchangePrices[address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2)] = TokenPrice(ethPrice, 18); // WETH
-        _exchangePrices[address(0xdAC17F958D2ee523a2206206994597C13D831ec7)] = TokenPrice(usdTo1XMM, 6); // USDT
-        _exchangePrices[address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48)] = TokenPrice(usdTo1XMM, 6); // USDC
-        _exchangePrices[address(0x6B175474E89094C44Da98b954EedeAC495271d0F)] = TokenPrice(usdTo1XMM, 18); // DAI
+        _exchangePrices[WETH] = TokenPrice(ethPrice, 18); // WETH
+        _exchangePrices[USDT] = TokenPrice(usdTo1XMM, 6); // USDT
+        _exchangePrices[USDC] = TokenPrice(usdTo1XMM, 6); // USDC
+        _exchangePrices[DAI] = TokenPrice(usdTo1XMM, 18); // DAI
 &nbsp;
         Initial1XMMPrice_USD = _initial1XMMPrice_USD;
-        _authorizedTokensList.push(address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2)); // WETH
-        _authorizedTokensList.push(address(0xdAC17F958D2ee523a2206206994597C13D831ec7)); // USDT
-        _authorizedTokensList.push(address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48)); // USDC
-        _authorizedTokensList.push(address(0x6B175474E89094C44Da98b954EedeAC495271d0F)); // DAI
+        _authorizedTokensList.push(WETH); // WETH
+        _authorizedTokensList.push(USDT); // USDT
+        _authorizedTokensList.push(USDC); // USDC
+        _authorizedTokensList.push(DAI); // DAI
     }
 &nbsp;
     /// @notice Returns the list of tokens authorized for payments.
@@ -420,12 +447,12 @@ abstract contract PaymentManager is MembersOnly {
     /// @param token The address of the token to authorize.
     /// @param decimals The number of decimals for the token.
     /// @param price The price of the token in USD, with 4 digits precision.
-    function addAuthorizedToken(address token, uint8 decimals, uint32 price) external <span class="missing-if-branch" title="else path not taken" >E</span>onlyOwner {
+    function addAuthorizedToken(address token, uint8 decimals, uint64 price) external <span class="missing-if-branch" title="else path not taken" >E</span>onlyOwner {
         require(!_authorizedTokens[token], "E2");
 &nbsp;
         _authorizedTokens[token] = true;
         _authorizedTokensList.push(token);
-        _exchangePrices[token] = TokenPrice((uint64(price) * PRECISION) / Initial1XMMPrice_USD, decimals);
+        _exchangePrices[token] = TokenPrice((price * PRECISION) / Initial1XMMPrice_USD, decimals);
     }
 &nbsp;
     /// @notice Gets the exchange price for a specific token.
@@ -435,7 +462,7 @@ abstract contract PaymentManager is MembersOnly {
     function getPrice(address token) external view onlyAuthorizedToken(token) returns (uint64) {
         if (token == address(0)) {
             // If the token is ETH, we return the price for WETH
-            token = address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
+            token = WETH;
         }
 &nbsp;
         return _exchangePrices[token].price;
@@ -445,8 +472,8 @@ abstract contract PaymentManager is MembersOnly {
     /// @param token The address of the token to set the price for.
     /// @param price The new price of the token, in USD.
     /// @dev The price is expressed in USD, with 4 digits precision
-    function setPrice(address token, uint32 price) external onlyOwner notUSD(token) {
-        _exchangePrices[token].price = (uint64(price) * PRECISION) / Initial1XMMPrice_USD;
+    function setPrice(address token, uint64 price) external onlyOwner notUSD(token) {
+        _exchangePrices[token].price = (price * PRECISION) / Initial1XMMPrice_USD;
     }
 &nbsp;
     /********************************
@@ -461,6 +488,9 @@ abstract contract PaymentManager is MembersOnly {
     }
 &nbsp;
     function _getAmountOf1XMMForToken(address token, uint256 amount) internal view returns (uint256) {
+        // We make sure that no address 0 can be passed as arg
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (token == address(0)) token = WETH;
+&nbsp;
         TokenPrice storage tokenPrice = _exchangePrices[token];
         uint256 onexmmAmount = amount * tokenPrice.price * (10 ** (18 - tokenPrice.decimals)); // Adjust for tokens' decimal
         onexmmAmount /= PRECISION; // Adjust for price precision
@@ -469,6 +499,9 @@ abstract contract PaymentManager is MembersOnly {
     }
 &nbsp;
     function _getAmountOfTokenFor1XMM(address token, uint256 amount1XMM) internal view returns (uint256) {
+        // We make sure that no address 0 can be passed as arg
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (token == address(0)) token = WETH;
+&nbsp;
         TokenPrice storage tokenPrice = _exchangePrices[token];
         uint256 tokenAmount = amount1XMM * PRECISION / tokenPrice.price; // Adjust for price precision
         tokenAmount *= (10 ** (tokenPrice.decimals - 18)); // Adjust for tokens' decimal
@@ -481,7 +514,7 @@ abstract contract PaymentManager is MembersOnly {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Aug 02 2025 16:54:02 GMT+0700 (Indochina Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Aug 06 2025 10:02:17 GMT+0700 (Indochina Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

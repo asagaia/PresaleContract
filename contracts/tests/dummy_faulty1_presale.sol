@@ -67,7 +67,7 @@ contract FaultyPresaleContract1 is PaymentManager {
 
         IERC20 tokenContract = IERC20(token);
         // We check the 1XMM allowance for presale contract, in case transaction must be reverted
-        require(tokenContract.allowance(msg.sender, address(this)) >= amount, "Allowance err");
+        require(tokenContract.allowance(msg.sender, address(this)) >= amount, "Insufficient allowance");
         
         uint256 amount1XMM = _getAmountOf1XMMForToken(token, amount);
 

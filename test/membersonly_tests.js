@@ -26,7 +26,7 @@ describe('Test membersonly functions', function () {
 
         expect(await pscontract.connect(spender).isAuthorized()).to.be.false;
         await expect(pscontract.connect(spender).addAuthorizedUser(spender.address)).to.be.revertedWith('E0');
-        await pscontract.addAuthorizedUser(spender.address);
+        await expect(pscontract.addAuthorizedUser(spender.address)).to.emit(pscontract, "AuthorizedUserAdded");
         expect(await pscontract.connect(spender).isAuthorized()).to.be.true;
     });
 

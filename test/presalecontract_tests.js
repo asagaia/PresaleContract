@@ -81,7 +81,7 @@ describe('Test presale contract functions', function () {
       await pscontract.addAuthorizedUser(spender);
         
       // Presale contract does not have allowance
-      await expect(pscontract.connect(spender).exchangeToken(dummyToken, 100n * decimalAdjustment)).to.be.revertedWith("Allowance err");
+      await expect(pscontract.connect(spender).exchangeToken(dummyToken, 100n * decimalAdjustment)).to.be.revertedWith("Insufficient allowance");
       await dummyToken.connect(spender).approve(await pscontract.getAddress(), 100n * decimalAdjustment);
 
       // Spender executes the exchange
