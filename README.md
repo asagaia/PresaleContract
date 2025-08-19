@@ -1,5 +1,7 @@
 # PresaleContract
 Smart contract used to do the 1XMM presale --> participants shall review the code to understand what the smart contract is doing.<br/>
+**Address of the Presale Contract**: 0x0002dA0aeB10Ba517e523d630280Fd6d9451D80F<br/>
+The contract is managed by the Presale Manager: 0x1Ad724F94190BB5E3185Ec7c12374f7A7b7d7C37
 
 # How it works
 A limited amount of 1XMM tokens will be transferred to the pre-sale smart contract.<br/>
@@ -11,7 +13,7 @@ More authorized tokens can be added in time.
 **Note**: the TON payments are not active yet
 
 ## Process
-Participants must be **whitelisted to participate to the pre-sale**. Once a participant is whitelisted, he will be added to the authorized users and will be allowed to purchase 1XMM tokens. Several steps are covered during the process:
+Participants must be **whitelisted to participate to the pre-sale**. The whitelisting is automated; users must provide the presale code to be whitelisted.
 1. Participants will be asked to provide an allowance to the pre-sale smart contract, equal to the amount of Payment Tokens which is intended to be transferred
 2. Pre-sale smart contract will execute the transfer of 1XMM based on the specified exchange price --> exchange price will be disclosed before validation of the transaction
 3. If participants provide too many Payment Tokens (i.e. if there is not enough 1XMM tokens available), **all extra Payment Tokens are reverted back** to participants
