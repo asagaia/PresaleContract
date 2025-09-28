@@ -2,13 +2,12 @@
   "name": "presale-contract",
   "version": "1.0.0",
   "description": "A smart contract for managing a presale of 1XMM tokens.",
-  "type": "commonjs",
   "dependencies": {
     "@openzeppelin/contracts": "^5.4.0"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-network-helpers": "^1.0.13",
     "@nomicfoundation/hardhat-toolbox": "^6.0.0",
-    "hardhat": "^2.26.1"
+    "hardhat": "^2.21.0"
   }
 }

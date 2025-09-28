@@ -29,4 +29,9 @@ interface IErrors {
     /// @param balance The current ETH balance of the contract.
     /// @param value The value that was attempted to be transferred.
     error ETHBalanceError(uint256 balance, uint256 value);
+
+    /// @notice Error thrown when the current period cannot be incremented.
+    /// @dev This error should never be thrown (to users) since the presale contract should be deactivated,
+    /// i.e. block.timestamp > presaleEndTime, before users can reach the _checkSchedule method.
+    error EndOfPresaleError();
 }

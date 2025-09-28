@@ -45,7 +45,6 @@ describe('Test faulty presale contract 1 functions', function () {
 
       // Spender executes the exchange but it fails
       await expect(pscontract.connect(spender).exchangeToken(dummyToken, 100n * decimalAdjustment)).to.be.revertedWithCustomError(pscontract, "TransferFailed");
-
       expect (await dummyToken.balanceOf(spender)).to.equal(originalBalance);
     });
 });

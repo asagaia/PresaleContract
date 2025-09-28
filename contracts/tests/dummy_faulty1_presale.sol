@@ -43,6 +43,12 @@ contract FaultyPresaleContract1 is PaymentManager {
     constructor(address _receiving_account, address _1xmmAddress, uint256 _presaleStartTime, uint256 _presaleEndTime, uint32 _initial1XMMPrice_USD) PaymentManager(_1xmmAddress, _initial1XMMPrice_USD) {
         receivingAccount = _receiving_account;
         require(_presaleStartTime < _presaleEndTime, "Invalid presale times");
+
+        presaleSchedule.current_period_index = 0;
+        presaleSchedule.next_period_index = 1;
+        presaleSchedule.period_ends = [_presaleEndTime];
+        presaleSchedule.token_prices = [_initial1XMMPrice_USD];
+        
         presaleStartTime = _presaleStartTime;
         presaleEndTime = _presaleEndTime;
     }

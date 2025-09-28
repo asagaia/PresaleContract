@@ -5,6 +5,8 @@ import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { MembersOnly } from "./membersonly.sol";
 import { TokenPrice } from "../structures/token_price.sol";
 import { TONTokenType } from "./enums.sol";
+import { IErrors } from "./errors.sol";
+import { Schedule } from "../structures/schedule.sol";
 
 abstract contract PaymentManager is MembersOnly {
     /*************
@@ -35,12 +37,14 @@ abstract contract PaymentManager is MembersOnly {
      **************/
     address public immutable ONEXMM;
     // The initial price of 1 XMM token in USD, with 4 digits precision (e.g., 500 for $0.05)
-    uint32 public immutable Initial1XMMPrice_USD;
+    uint32 public OneXMMPrice_USD;
 
     address public immutable WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
     address public immutable USDT = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
     address public immutable USDC = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
     address public immutable DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
+
+    Schedule public presaleSchedule;
 
     /******************
      * Private Fields *
@@ -76,7 +80,7 @@ abstract contract PaymentManager is MembersOnly {
         _exchangePrices[USDC] = TokenPrice(usdTo1XMM, 6); // USDC
         _exchangePrices[DAI] = TokenPrice(usdTo1XMM, 18); // DAI
 
-        Initial1XMMPrice_USD = _initial1XMMPrice_USD;
+        OneXMMPrice_USD = _initial1XMMPrice_USD;
         _authorizedTokensList.push(WETH); // WETH
         _authorizedTokensList.push(USDT); // USDT
         _authorizedTokensList.push(USDC); // USDC
@@ -95,9 +99,10 @@ abstract contract PaymentManager is MembersOnly {
     function addAuthorizedToken(address token, uint8 decimals, uint64 price) external onlyOwner {
         require(!_authorizedTokens[token], "E2");
 
+        _checkPeriod();
         _authorizedTokens[token] = true;
         _authorizedTokensList.push(token);
-        _exchangePrices[token] = TokenPrice((price * PRECISION) / Initial1XMMPrice_USD, decimals);
+        _exchangePrices[token] = TokenPrice((price * PRECISION) / OneXMMPrice_USD, decimals);
     }
 
     /// @notice Gets the exchange price for a specific token.
@@ -110,6 +115,13 @@ abstract contract PaymentManager is MembersOnly {
             token = WETH;
         }
 
+        (uint32 oneXMMPriceForPeriod, uint16 currentPeriodIndex) = _getCurrent1XMMPriceAndPeriodIndex();
+
+        if (currentPeriodIndex != presaleSchedule.current_period_index) {
+            // The period has changed since the last price update, we need to adjust the price
+            return uint64((_exchangePrices[token].price * OneXMMPrice_USD) / oneXMMPriceForPeriod);
+        }
+
         return _exchangePrices[token].price;
     }
 
@@ -118,7 +130,8 @@ abstract contract PaymentManager is MembersOnly {
     /// @param price The new price of the token, in USD.
     /// @dev The price is expressed in USD, with 4 digits precision
     function setPrice(address token, uint64 price) external onlyOwner notUSD(token) {
-        _exchangePrices[token].price = (price * PRECISION) / Initial1XMMPrice_USD;
+        _checkPeriod();
+        _exchangePrices[token].price = (price * PRECISION) / OneXMMPrice_USD;
     }
 
     /********************************
@@ -126,6 +139,40 @@ abstract contract PaymentManager is MembersOnly {
      ********************************/
     function _availableForSale() internal view returns (uint256) {
         return _onexmmToken.balanceOf(address(this));
+    }
+
+    function _change1XMMPrice_USD(uint32 new1XMMPrice) internal {
+        // We need to update the prices of all authorized tokens
+        for (uint i = 0; i < _authorizedTokensList.length; i++) {
+            address token = _authorizedTokensList[i];
+            uint64 oldPrice = _exchangePrices[token].price;
+            _exchangePrices[token].price = uint64((oldPrice * OneXMMPrice_USD) / new1XMMPrice);
+        }
+
+        OneXMMPrice_USD = new1XMMPrice;
+    }
+
+    function _checkPeriod() internal {
+        if (block.timestamp < presaleSchedule.period_ends[presaleSchedule.current_period_index]) return;
+
+        (uint32 oneXMMPriceForPeriod, uint16 currentPeriodIndex) = _getCurrent1XMMPriceAndPeriodIndex();
+        presaleSchedule.current_period_index = currentPeriodIndex;
+        presaleSchedule.next_period_index = currentPeriodIndex + 1;
+        _change1XMMPrice_USD(oneXMMPriceForPeriod);
+    }
+
+    function _getCurrent1XMMPriceAndPeriodIndex() internal view returns (uint32 oneXMMPriceForPeriod, uint16 currentPeriodIndex) {
+        if (block.timestamp < presaleSchedule.period_ends[presaleSchedule.current_period_index]
+        || presaleSchedule.next_period_index >= presaleSchedule.period_ends.length)
+            return (presaleSchedule.token_prices[presaleSchedule.current_period_index], presaleSchedule.current_period_index);
+        
+        for (uint16 i = presaleSchedule.next_period_index; i < presaleSchedule.period_ends.length; i++) {
+            if (block.timestamp < presaleSchedule.period_ends[i]) {
+                return (presaleSchedule.token_prices[i], i);
+            }
+        }
+
+        revert IErrors.EndOfPresaleError();
     }
 
     function _transfer(address to, uint256 amount1XMM) internal returns(bool) {

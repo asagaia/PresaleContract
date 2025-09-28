@@ -47,10 +47,17 @@ contract PresaleContract is PaymentManager {
     uint256 private _totalLockedAmount;
 
     /// @param _receiving_account The address of the wallet which will receive the funds from the presale.
-    constructor(address _receiving_account, address _1xmmAddress, uint256 _presaleStartTime, uint256 _presaleEndTime, uint32 _initial1XMMPrice_USD) PaymentManager(_1xmmAddress, _initial1XMMPrice_USD) {
+    constructor(address _receiving_account, address _1xmmAddress, uint256 _presaleStartTime, uint256 _presaleEndTime, uint32 _initial1XMMPrice_USD) 
+    PaymentManager(_1xmmAddress, _initial1XMMPrice_USD) {
         receivingAccount = _receiving_account;
         require(_presaleStartTime < _presaleEndTime, "Invalid presale times");
         presaleStartTime = _presaleStartTime;
+
+        presaleSchedule.current_period_index = 0;
+        presaleSchedule.next_period_index = 1;
+        presaleSchedule.period_ends = [_presaleEndTime];
+        presaleSchedule.token_prices = [_initial1XMMPrice_USD];
+
         presaleEndTime = _presaleEndTime;
         actualEndTime = _presaleEndTime;
     }
@@ -108,11 +115,11 @@ contract PresaleContract is PaymentManager {
     }
 
     /// @notice Enables the owner to transfer a specified amount of Ether to the owner's address.
-    function transferETHToReceivingAccount(uint256 value) external onlyReceivingAccountOrOwner payable {
+    function transferETHToReceivingAccount(uint256 amt) external onlyReceivingAccountOrOwner {
         uint256 balance = address(this).balance;
-        if (balance == 0 || value == 0 || value > balance) revert IErrors.ETHBalanceError(balance, value);
+        if (balance == 0 || amt == 0 || amt > balance) revert IErrors.ETHBalanceError(balance, amt);
 
-        payable(receivingAccount).transfer(value);
+        payable(receivingAccount).transfer(amt);
         emit ETHWithdrawal(balance, address(this).balance);
     }
 
