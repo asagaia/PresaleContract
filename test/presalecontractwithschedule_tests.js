@@ -91,6 +91,6 @@ describe('Test presale contract functions', function () {
       await time.increase(864_000);
       dummyToken.connect(spender).approve(await pscontract.getAddress(), 10n * decimalAdjustment);
       await pscontract.connect(spender).exchangeToken(await dummyToken.getAddress(), 10n * decimalAdjustment);
-      expect(await dummy1XMM.balanceOf(spender)).to.equal(250_000n * decimalAdjustment); // 7,500 USD worth of tokens at 7.5 cents each
+      expect(await dummy1XMM.balanceOf(spender)).to.equal(250_000n * decimalAdjustment); // +7,500 USD worth of tokens at 7.5 cents each
     });
 });
